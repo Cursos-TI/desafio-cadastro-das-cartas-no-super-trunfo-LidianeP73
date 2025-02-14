@@ -1,0 +1,47 @@
+This GitHub Actions workflow is designed to build and test a CMake project across multiple platforms (Windows and Linux) using different compilers (GCC, Clang, and MSVC). Here's a breakdown of its key components:
+
+### Workflow Overview:
+1. **Trigger Events**:
+   - Runs on `push` and `pull_request` events targeting the `main` branch.
+
+2. **Jobs**:
+   - A single job named `build` is defined, which runs on a matrix of operating systems (`ubuntu-latest`, `windows-latest`) and compilers (`gcc`, `clang`, `cl`).
+
+3. **Matrix Strategy**:
+   - The `matrix` defines combinations of OS, build type, and compilers.
+   - The `include` and `exclude` directives ensure the correct compiler is used for each OS (e.g., `cl` for Windows, `gcc` and `clang` for Linux).
+
+4. **Steps**:
+   - **Checkout**: Clones the repository using `actions/checkout@v4`.
+   - **Set reusable strings**: Defines a reusable output directory for the build.
+   - **Configure CMake**: Configures the CMake project with the appropriate compiler and build type.
+   - **Build**: Builds the project using the configured CMake settings.
+   - **Test**: Runs tests using `ctest` with the specified build configuration.
+
+### Key Features:
+- **Cross-Platform Support**: Works on both Linux and Windows.
+- **Compiler Flexibility**: Supports GCC, Clang, and MSVC.
+- **Reusable Outputs**: Uses step outputs to avoid hardcoding paths.
+- **Fail-Fast Disabled**: Ensures all matrix combinations are executed, even if one fails.
+
+### Example Matrix Combinations:
+1. **Windows**:
+   - OS: `windows-latest`
+   - Compiler: `cl` (MSVC)
+   - Build Type: `Release`
+
+2. **Linux (GCC)**:
+   - OS: `ubuntu-latest`
+   - Compiler: `gcc`
+   - Build Type: `Release`
+
+3. **Linux (Clang)**:
+   - OS: `ubuntu-latest`
+   - Compiler: `clang`
+   - Build Type: `Release`
+
+### Customization:
+- Add more build types (e.g., `Debug`, `RelWithDebInfo`) by expanding the `build_type` list in the matrix.
+- Add more operating systems (e.g., `macos-latest`) by extending the `os` list.
+
+This workflow is a robust starting point for CI/CD pipelines targeting multi-platform CMake projects.
